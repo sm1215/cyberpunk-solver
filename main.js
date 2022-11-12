@@ -64,28 +64,41 @@ const solver = {
         bufferMax: 7
     },
     interface: {
-        maxtrix: document.querySelector('#matrix'),
+        matrix: document.querySelector('#matrix'),
         daemon: {},
         buffer: {},
         bufferMax: 0
     },
     system: {
-        maxtrix: [],
+        matrix: [],
+        maxtrixSize: [5,5],
         daemon: [],
         buffer: [],
         bufferMax: 0
     },
     init: () => {
-        
+
+    },
+    matrix: () => {
+        const [xMax, yMax] = this.system.maxtrixSize;
+        for (let x = 0; x++; x < xMax) {
+            for (let y = 0; y++; y < yMax) {
+
+            }
+        }
     }
 };
 
 (function() {
-    document.onreadystatechange
-    if (solver.DEV === true) {
-        Object.assign(solver.system, solver.sample);
-        solver.interface.matrix.value = solver.system.matrix;
-        console.log(solver.system);
-    }
-    solver.init();
+    window.onload = () => {
+        if (solver.DEV === true) {
+            Object.assign(solver.system, solver.sample);
+            solver.interface.matrix.value = solver.system.matrix
+                .map((column) => column.map((row) => row.join('\n')).join(':'));
+        }
+        console.log(solver.system.matrix)
+        solver.init();
+
+
+    };
 })();
