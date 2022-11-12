@@ -1,5 +1,5 @@
 const solver = {
-    DEV: true,
+    demo: true,
     sample: {
         matrix: [
             [
@@ -63,42 +63,25 @@ const solver = {
         ],
         bufferMax: 7
     },
-    interface: {
-        matrix: document.querySelector('#matrix'),
-        daemon: {},
-        buffer: {},
-        bufferMax: 0
-    },
-    system: {
-        matrix: [],
-        maxtrixSize: [5,5],
-        daemon: [],
-        buffer: [],
-        bufferMax: 0
-    },
-    init: () => {
-
-    },
-    matrix: () => {
-        const [xMax, yMax] = this.system.maxtrixSize;
-        for (let x = 0; x++; x < xMax) {
-            for (let y = 0; y++; y < yMax) {
-
-            }
+    config: {
+        matrix: {
+            size: [5, 5],
+            element: document.querySelector('#matrix')
         }
+    },
+    init: function() {
+        this.matrix = new Matrix(this.config.matrix);
+        if (this.demo === true) {
+            this.setupDemo();
+        }
+    },
+    setupDemo: function() {
+        this.matrix.value = this.sample.matrix;
     }
 };
 
 (function() {
     window.onload = () => {
-        if (solver.DEV === true) {
-            Object.assign(solver.system, solver.sample);
-            solver.interface.matrix.value = solver.system.matrix
-                .map((column) => column.map((row) => row.join('\n')).join(':'));
-        }
-        console.log(solver.system.matrix)
         solver.init();
-
-
     };
 })();
