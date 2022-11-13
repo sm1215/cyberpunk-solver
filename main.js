@@ -1,6 +1,6 @@
 const solver = {
-    demo: true,
-    test: true,
+    demo: false,
+    debug: false,
     sample: {
         matrix: [
             [
@@ -70,27 +70,44 @@ e9 bd 1c 55 55
         bufferMax: 7
     },
     config: {
+        // how many characters each unit of information consists of
+        input: {
+            inputChunkSize: 3
+        },
         matrix: {
-            size: [5, 5],
+            size: [2, 5],
             element: document.querySelector('#matrix')
         }
     },
     init: function() {
-        this.matrix = new Matrix(this.config.matrix);
-        console.log('this.matrix', this.matrix);
+        ['matrix'].forEach((type) => {
+            console.log('this.config[type]', this.config[type]);
+            
+            Object.assign(this.config[type], this.config.input);
+        });
+        console.log('this.config.matrix', this.config.matrix);
         
+        this.matrix = new Matrix(this.config.matrix);
+
+        document.querySelector('#reset').addEventListener('click', () => {
+            this.matrix.value = '';
+        });
+
+
         if (this.demo === true) {
             this.setupDemo();
         }
-        if (this.test === true) {
-            const serializeTest = new Matrix(this.config.matrix)
-                .serialize(this.sample.matrixDeserialized);
-
-            console.log('serializeTest', serializeTest);
+        if (this.debug === true) {
+            this.showDebugLogs();
         }
     },
     setupDemo: function() {
         this.matrix.value = this.sample.matrix;
+    },
+    showDebugLogs: function() {
+        const serializeTest = new Matrix(this.config.matrix)
+            .serialize(this.sample.matrixDeserialized);
+        console.log('serializeTest', serializeTest);
     }
 };
 
