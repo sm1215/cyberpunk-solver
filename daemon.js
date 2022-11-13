@@ -1,4 +1,4 @@
-class Matrix extends HexInput {
+class Daemon extends HexInput {
     constructor() {
         super(...arguments);
     }

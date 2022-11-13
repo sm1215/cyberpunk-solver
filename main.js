@@ -1,5 +1,6 @@
 const solver = {
     demo: true,
+    test: true,
     sample: {
         matrix: [
             [
@@ -38,6 +39,11 @@ const solver = {
                 'ff'
             ]
         ],
+        matrixDeserialized: deserialized = `1c 55 ff bd e9
+bd 1c e9 ff e9
+55 bd ff 1c 1c
+e9 bd 1c 55 55
+55 e9 bd 55 ff`,
         daemon: [
             [
                 'e9',
@@ -71,8 +77,16 @@ const solver = {
     },
     init: function() {
         this.matrix = new Matrix(this.config.matrix);
+        console.log('this.matrix', this.matrix);
+        
         if (this.demo === true) {
             this.setupDemo();
+        }
+        if (this.test === true) {
+            const serializeTest = new Matrix(this.config.matrix)
+                .serialize(this.sample.matrixDeserialized);
+
+            console.log('serializeTest', serializeTest);
         }
     },
     setupDemo: function() {
