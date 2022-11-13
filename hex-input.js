@@ -11,7 +11,11 @@ class HexInput {
         this.element.addEventListener('input', (event) => {
             const {target, target: {value, selectionEnd}} = event;
             this.input = value;
-            target.selectionEnd = selectionEnd === value.length ? this.deserialized.length : selectionEnd;
+
+            // Keep the cursor in place, accounting for extra whitespaces
+            target.selectionEnd = selectionEnd === value.length ?
+                this.deserialized.length :
+                selectionEnd;
         });
     }
 
@@ -34,7 +38,7 @@ class HexInput {
     validate(data) {
         const [columns, rows] = this.size;
         const validated = data
-            .match(/\d?[A-F]?/gi)
+            .match(/\d|[A-F]/gi)
             .filter(value => value.length > 0)
             .slice(0, columns * rows * this.inputChunkSize)
             .join('');
