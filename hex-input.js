@@ -9,25 +9,26 @@ class HexInput {
         this.inputChunkSize = inputChunkSize;
 
         this.element.addEventListener('input', (event) => {
-            const {target} = event;
-            this.selectionEnd = target.selectionEnd;
-            this.value = target.value;
-            target.selectionEnd = this.selectionEnd;
+            const {target, target: {value, selectionEnd}} = event;
+            this.input = value;
+            target.selectionEnd = selectionEnd === value.length ? this.deserialized.length : selectionEnd;
         });
     }
 
-    set value(value) {
-        this._value = this.validate(value)
+    set input(value) {
+        this.serialized = this.validate(value)
             .normalize()
             .serialize();
 
-        // TODO: Preserve cursor location within string of textbox when typing
-        // somewhere in the middle of the string
-        this.element.value = this.deserialize(this._value);
+        this.element.value = this.deserialized = this.deserialize();
     }
     
     set readonly(value) {
         this.element.disabled = value;
+    }
+
+    reset() {
+        this.input = '';
     }
 
     validate(data) {
@@ -38,17 +39,17 @@ class HexInput {
             .slice(0, columns * rows * this.inputChunkSize)
             .join('');
 
-        this._value = validated;
+        this._input = validated;
         return this;
     }
 
-    normalize(data = this._value) {
-        this._value = data.toUpperCase();
+    normalize(data = this._input) {
+        this._input = data.toUpperCase();
         return this;
     }
 
     // Breaks down a string into an array based on this.size
-    serialize(data = this._value) {
+    serialize(data = this._input) {
         if (typeof data === 'string' && data.length > 0) {
             const [columns] = this.size;
 
@@ -66,7 +67,7 @@ class HexInput {
     }
 
     // Joins an array into a single string with delimiting whitespace values for use in a textbox
-    deserialize(data = this._value) {
+    deserialize(data = this.serialized) {
         if (Array.isArray(data)) {
             return data.map((row) => row.join(' ')).join('\n');
         } else {

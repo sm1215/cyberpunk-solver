@@ -96,11 +96,11 @@ const solver = {
     },
     setupListeners: function() {
         document.querySelector('#reset').addEventListener('click', () => {
-            this.matrix.value = '';
+            this.matrix.reset();
         });
     },
     setupDemo: function() {
-        this.matrix.value = this.sample.matrix;
+        this.matrix.input = this.sample.matrix;
     },
     showDebugLogs: function() {
         const serializeTest = new Matrix(this.config.matrix)
