@@ -6,13 +6,12 @@
     <title>Protocol Breach</title>
     <style>
         body{ font-family: 'lucida console', monaco, monospace; color:mediumspringgreen; background:#052013; }
-        ::selection{ background:#1f3a2b; }
-        ::-moz-selection{ background:#1f3a2b; }
+        ::selection{ background:#1f3a2b; color: mediumspringgreen; }
         #monitor{ width:800px; height:300px; margin:20px auto; }
         #matrix{ display:inline-block; width:300px; height:300px; border:1px solid mediumspringgreen; }
         .label { display: block; }
         .button{ display:block; margin:10px 0; padding:5px 10px; line-height:10px; font-size:14px; border:1px solid mediumspringgreen; cursor:pointer; text-align:center; }
-        input, textarea{ border:1px solid mediumspringgreen; border-radius:0px; color:mediumspringgreen; background:#052013; outline:none; resize:none; text-transform:uppercase; }
+        input, textarea{ border:1px solid mediumspringgreen; border-radius:0px; color:mediumspringgreen; background:#052013; outline:none; resize:none; }
         input:focus, textarea:focus{ color:#1f3a2b; background:mediumspringgreen; }
         textarea{ font-size: 16px; letter-spacing:1px; }
         textarea:focus{ font-weight:bold; }
@@ -47,7 +46,7 @@
     <div id="instructions">
         <p>README</p>
         <ol>
-            <li>Enter your code matrix</li>
+            <li>Enter your code matrix (it checks valid hex characters)</li>
         </ol>
     </div>
 </body>

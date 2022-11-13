@@ -14,12 +14,10 @@ class HexInput {
     }
 
     set value(value) {
-        if (value.trim().length === 0) {
-            this._value = value;
-            this.element.value = value;
-            return;
-        }
-        this._value = this.serialize(value);
+        this._value = this.validate(value)
+            .normalize()
+            .serialize();
+
         // TODO: Preserve cursor location within string of textbox when typing
         // somewhere in the middle of the string
         this.element.value = this.deserialize(this._value);
@@ -29,33 +27,48 @@ class HexInput {
         this.element.disabled = value;
     }
 
-    // Breaks down a string into an array based on this.size
-    serialize(data) {
-        let serialized = data;
-        if (typeof data === 'string') {
-            // TODO: Constrain the amount of characters accepted as input
-            const [columns, rows] = this.size;
-            const cleaned = data.replace(/\s+/g, '');
+    validate(data) {
+        const [columns, rows] = this.size;
+        const validated = data
+            .match(/\d?[A-F]?/gi)
+            .filter(value => value.length > 0)
+            .slice(0, columns * rows * this.inputChunkSize)
+            .join('');
 
-            // break string down into rows based on column size            
+        this._value = validated;
+        return this;
+    }
+
+    normalize(data = this._value) {
+        this._value = data.toUpperCase();
+        return this;
+    }
+
+    // Breaks down a string into an array based on this.size
+    serialize(data = this._value) {
+        if (typeof data === 'string' && data.length > 0) {
+            const [columns] = this.size;
+
+            // break string down into rows based on column size
             const rowChunkPattern = new RegExp(`.{1,${columns * this.inputChunkSize}}`, 'g');
             
             // break all characters in a row down into the chunkSize
             const columnChunkPattern = new RegExp(`.{1,${this.inputChunkSize}}`, 'g');
             
-            const chunks = cleaned.match(rowChunkPattern);
-            serialized = chunks.map((row) => row.match(columnChunkPattern));
+            const chunks = data.match(rowChunkPattern);
+            return chunks.map((row) => row.match(columnChunkPattern));
+        } else {
+            return data;
         }
-        return serialized;
     }
 
-    // Joins a 2D array into a single string with delimiting whitespace values for use in a textbox
-    deserialize(data) {
-        let deserialized;
+    // Joins an array into a single string with delimiting whitespace values for use in a textbox
+    deserialize(data = this._value) {
         if (Array.isArray(data)) {
-            deserialized = data.map((row) => row.join(' ')).join('\n');
+            return data.map((row) => row.join(' ')).join('\n');
+        } else {
+            return data;
         }
-        return deserialized;
     }
 };
 
