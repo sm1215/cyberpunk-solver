@@ -9,7 +9,10 @@ class HexInput {
         this.inputChunkSize = inputChunkSize;
 
         this.element.addEventListener('input', (event) => {
-            this.value = event.target.value;
+            const {target} = event;
+            this.selectionEnd = target.selectionEnd;
+            this.value = target.value;
+            target.selectionEnd = this.selectionEnd;
         });
     }
 
