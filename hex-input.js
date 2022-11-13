@@ -20,11 +20,15 @@ class HexInput {
     }
 
     set input(value) {
+        console.log('hexInput value', value);
         this.serialized = this.validate(value)
             .normalize()
             .serialize();
 
         this.element.value = this.deserialized = this.deserialize();
+        console.log('input this', this);
+        console.log('this.deserialized', this.deserialized);
+        console.log('this.element.value', this.element.value);
     }
     
     set readonly(value) {
@@ -35,10 +39,12 @@ class HexInput {
         this.input = '';
     }
 
-    validate(data) {
+    validate(data = '') {
+        console.log('validate data', data);
         const [columns, rows] = this.size;
-        const validated = data
-            .match(/\d|[A-F]/gi)
+        const matched = data.match(/\d|[A-F]/gi) || [];
+        const validated = matched
+            .map((value = []) => value)
             .filter(value => value.length > 0)
             .slice(0, columns * rows * this.inputChunkSize)
             .join('');
@@ -48,12 +54,14 @@ class HexInput {
     }
 
     normalize(data = this._input) {
+        console.log('normalize data', data);
         this._input = data.toUpperCase();
         return this;
     }
 
     // Breaks down a string into an array based on this.size
     serialize(data = this._input) {
+        console.log('serialize data', data);
         if (typeof data === 'string' && data.length > 0) {
             const [columns] = this.size;
 
@@ -71,7 +79,9 @@ class HexInput {
     }
 
     // Joins an array into a single string with delimiting whitespace values for use in a textbox
+    // TODO: deserialize isn't currently giving the correct whitespacing structure
     deserialize(data = this.serialized) {
+        console.log('deserialize data', data);
         if (Array.isArray(data)) {
             return data.map((row) => row.join(' ')).join('\n');
         } else {

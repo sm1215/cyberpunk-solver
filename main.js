@@ -74,7 +74,11 @@ const solver = {
             size: [5, 5],
             element: document.querySelector('#matrix')
         },
-        buffer: {},
+        buffer: {
+            size: [1, 7],
+            element: document.querySelector('#buffer'),
+            readonly: true
+        },
         daemon: {}
     },
     init: function() {
@@ -84,6 +88,7 @@ const solver = {
         });
         
         this.matrix = new Matrix(this.config.matrix);
+        this.buffer = new Buffer(this.config.buffer);
 
         this.setupListeners();
 
@@ -98,6 +103,8 @@ const solver = {
         document.querySelector('#reset').addEventListener('click', () => {
             this.matrix.reset();
         });
+
+
     },
     setupDemo: function() {
         this.matrix.input = this.sample.matrix;
